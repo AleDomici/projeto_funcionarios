@@ -1,33 +1,37 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 class Funcionario(ABC):
-    def __init__(self, nome, salario):
+    def __init__(self, nome: str, salario: float):
         self._nome = nome
         self._salario = salario
 
-    @abstractmethod
-    def calcular_bonus(self):
-        pass
-
-    def get_nome(self):
+    @property
+    def nome(self) -> str:
         return self._nome
 
-    def get_salario(self):
+    @property
+    def salario(self) -> float:
         return self._salario
 
-    def set_salario(self, salario):
-        if salario < 0:
-            raise ValueError("O salário não pode ser negativo.")
-        self._salario = salario
+    @salario.setter
+    def salario(self, valor: float):
+        if valor < 0:
+            raise ValueError("Salário não pode ser negativo.")
+        self._salario = valor
+
+    @abstractmethod
+    def calcular_bonus(self) -> float:
+        pass
 
 class FuncionarioComum(Funcionario):
-    def calcular_bonus(self):
-        return self._salario * 0.10
+    def calcular_bonus(self) -> float:
+        return self.salario * 0.10
 
 class Gerente(Funcionario):
-    def __init__(self, nome, salario, bonus_adicional):
+    def __init__(self, nome: str, salario: float, bonus_adicional: float = 0):
         super().__init__(nome, salario)
-        self.bonus_adicional = bonus_adicional
+        self._bonus_adicional = bonus_adicional
 
-    def calcular_bonus(self):
-        return self._salario * 0.20 + self.bonus_adicional
+    def calcular_bonus(self) -> float:
+        return self.salario * 0.20 + self._bonus_adicional
